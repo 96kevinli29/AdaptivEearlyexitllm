@@ -1,4 +1,3 @@
-
 <html lang="en" class="scroll-smooth">
 
 <head>
@@ -51,6 +50,117 @@
       transform: scale(1.02);
       filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
     }
+    
+    /* * [MODIFIED] 6. Styles for Chat Demos
+     */
+    .chat-bubble {
+        padding: 0.75rem; /* p-3 */
+        border-radius: 0.75rem; /* rounded-lg */
+        max-width: 80%;
+        opacity: 0; /* Hidden by default for JS animation */
+        transform: translateY(15px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    
+    .chat-bubble.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* User bubble (left) */
+    .user-bubble {
+        background-color: #334155; /* slate-700 */
+        color: #f8fafc; /* slate-50 */
+        margin-right: auto; 
+    }
+
+    /* Model bubble (right) */
+    .model-bubble {
+        background-color: #475569; /* slate-600 */
+        color: #cbd5e1; /* slate-300 */
+        margin-left: auto; 
+    }
+    
+    /* Special highlight for the correct idea */
+    .model-bubble.correct-idea {
+        background-color: #0c4a6e; /* sky-900 */
+        border: 1px solid #0ea5e9; /* sky-500 */
+        color: #e0f2fe; /* sky-100 */
+    }
+
+    /* [MODIFIED] DEER Early Exit highlight */
+    .model-bubble.deer-exit {
+        background-color: #166534; /* green-800 */
+        border: 1px solid #22c55e; /* green-500 */
+        color: #f0fdf4; /* green-50 */
+    }
+    
+    /* Special highlight for "overthinking" */
+    .model-bubble.overthink {
+        border: 1px dashed #64748b; /* slate-500 */
+        font-style: italic;
+    }
+    
+    /* Special highlight for the final wrong answer */
+    .model-bubble.wrong-answer {
+        background-color: #7f1d1d; /* red-900 */
+        border: 1px solid #ef4444; /* red-500 */
+        color: #fee2e2; /* red-100 */
+    }
+
+    /* [NEW] Styles for Adaptive Demo */
+    .model-bubble.basic-deer-fail {
+        background-color: #7f1d1d; /* red-900 */
+        border: 1px solid #ef4444; /* red-500 */
+        color: #fee2e2; /* red-100 */
+        font-style: italic;
+    }
+    .model-bubble.adaptive-check {
+        background-color: #0e7490; /* cyan-700 */
+        border: 1px solid #22d3ee; /* cyan-400 */
+        color: #ecfeff; /* cyan-50 */
+    }
+    .model-bubble.adaptive-continue {
+        background-color: #a16207; /* yellow-800 */
+        border: 1px solid #facc15; /* yellow-400 */
+        color: #fefce8; /* yellow-50 */
+    }
+    
+    /* * [NEW] 7. Styles for "Expected Improvements" animation
+     */
+    .improvement-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    
+    .improvement-item.is-visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .check-icon {
+        display: inline-block;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+    
+    .improvement-item.is-visible .check-icon {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    /* Optional: Add a subtle 'pop' animation on checkmark */
+    .check-icon.animate {
+        animation: check-pop 0.5s ease-out;
+    }
+    
+    @keyframes check-pop {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.5); }
+        100% { transform: scale(1); }
+    }
   </style>
 </head>
 
@@ -99,47 +209,57 @@
 
     <div class="fade-in-section h-px bg-slate-700 my-16"></div>
 
-    <!-- Problem -->
-    <h2 class="fade-in-section text-3xl font-bold text-cyan-400 mb-6">1. Problem: Overthinking in Reasoning Models</h2>
+    <!-- 
+      *************************************************
+      * [MODIFIED] 1. Problem & DEER Success Demo     *
+      *************************************************
+    -->
+    <h2 class="fade-in-section text-3xl font-bold text-cyan-400 mb-6">1. The Problem: Overthinking & The DEER Solution</h2>
 
     <p class="fade-in-section text-lg text-slate-400">
-      LLMs often think too long. After reaching the correct idea, they <b>continue reasoning</b>,
-      which increases cost and sometimes leads to worse answers.
+      LLMs often think too long (overthink). After reaching the correct idea, they continue reasoning,
+      which increases cost and can lead to worse answers.
+      <br><br>
+      The **DEER method** (Dynamic Early Exit in Reasoning) solves this by stopping the model as soon as it's confident, preventing overthinking.
     </p>
 
-    <!-- 9. SVG responsive optimization, colors updated -->
-    <div class="fade-in-section text-center my-8">
-      <svg width="100%" viewBox="0 0 680 110" class="max-w-2xl mx-auto">
-        <!-- Rectangles: using slate-700/800 -->
-        <rect x="10" y="30" width="120" height="40" rx="8" fill="#334155" stroke="#475569" />
-        <rect x="150" y="30" width="120" height="40" rx="8" fill="#334155" stroke="#475569" />
-        <!-- Highlighted Rect: using sky-500 -->
-        <rect x="290" y="30" width="150" height="40" rx="8" fill="#0ea5e9" stroke="#38bdf8" />
-        <rect x="460" y="30" width="120" height="40" rx="8" fill="#334155" stroke="#475569" />
-        <rect x="600" y="30" width="120" height="40" rx="8" fill="#334155" stroke="#475569" />
-
-        <!-- Text -->
-        <text x="48" y="56" fill="white" font-size="15" font-family="Inter, sans-serif">Think</text>
-        <text x="183" y="56" fill="white" font-size="15" font-family="Inter, sans-serif">Think</text>
-        <text x="319" y="56" fill="black" font-size="15" font-family="Inter, sans-serif" font-weight="600">Correct Idea</text>
-        <text x="488" y="56" fill="white" font-size="15" font-family="Inter, sans-serif">Overthink</text>
-        <text x="630" y="56" fill="white" font-size="15" font-family="Inter, sans-serif">Wrong</text>
-
-        <!-- Connectors: using sky-500 -->
-        <line x1="130" y1="50" x2="150" y2="50" stroke="#0ea5e9" stroke-width="3" />
-        <line x1="270" y1="50" x2="290" y2="50" stroke="#0ea5e9" stroke-width="3" />
-        <line x1="440" y1="50" x2="460" y2="50" stroke="#0ea5e9" stroke-width="3" />
-        <line x1="580" y1="50" x2="600" y2="50" stroke="#0ea5e9" stroke-width="3" />
-      </svg>
+    <!-- [MODIFIED] Demo 1: DEER Success -->
+    <div class="fade-in-section bg-slate-800 rounded-xl shadow-2xl max-w-2xl mx-auto my-12 border border-slate-700">
+      <!-- Chat Header -->
+      <div class="flex items-center p-4 border-b border-slate-700">
+        <span class="text-sky-400 font-semibold">LLM Inference with DEER</span>
+        <span class="text-slate-500 text-sm ml-2">(Click "Run" to see)</span>
+        <span class="w-3 h-3 bg-red-500 rounded-full ml-auto mr-2"></span>
+        <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
+        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      </div>
+      
+      <!-- Chat Body -->
+      <div id="chat-window" class="p-6 space-y-4 h-96 overflow-y-auto scroll-smooth">
+        <!-- User Message (Visible by default) -->
+        <div class="chat-bubble user-bubble is-visible">
+          <p class="font-semibold text-slate-200">User Prompt:</p>
+          <p>A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?</p>
+        </div>
+        <!-- Model messages will be injected here by JS -->
+      </div>
+      
+      <!-- Chat Footer/Controls -->
+      <div class="p-4 border-t border-slate-700 text-center">
+        <button id="start-demo-btn" class="bg-sky-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-sky-500 transition-colors shadow-md hover:shadow-lg">
+          Run DEER-Enabled Chain
+        </button>
+      </div>
     </div>
+    <!-- End of modified section -->
 
-    <p class="fade-in-section text-base text-slate-400 text-center">Overthinking = unnecessary cost + accuracy drops.</p>
+    <p class="fade-in-section text-base text-slate-400 text-center">DEER stops reasoning at the right time, saving cost and securing the correct answer.</p>
 
     <div class="fade-in-section h-px bg-slate-700 my-16"></div>
 
     <!-- 
       ****************************************
-      * [NEW] 10. LLM Flowchart & Optimization *
+      * 2. LLM Flowchart & Optimization      *
       ****************************************
     -->
     <h2 class="fade-in-section text-3xl font-bold text-cyan-400 mb-6">2. LLM Training & Inference Flow</h2>
@@ -264,29 +384,44 @@
 
     <div class="fade-in-section h-px bg-slate-700 my-16"></div>
 
-    <!-- DEER (Renumbered to 3) -->
-    <h2 class="fade-in-section text-3xl font-bold text-cyan-400 mb-6">3. Original DEER Method</h2>
+    <!-- 
+      ****************************************
+      * [MODIFIED] 3. DEER Method (Step-by-Step)
+      ****************************************
+    -->
+    <h2 class="fade-in-section text-3xl font-bold text-cyan-400 mb-6">3. The Original DEER Method: Step-by-Step</h2>
 
-    <!-- 10. Redesigned .flow and .box styles -->
-    <div class="fade-in-section flow bg-slate-800 rounded-xl shadow-lg p-6 my-6 text-center">
-      <div class="flex flex-wrap justify-center items-center">
-        <span class="box inline-block bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 m-2 text-base">CoT Running</span>
-        <span class="text-sky-400 text-2xl mx-2">→</span>
-        <span class="box inline-block bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 m-2 text-base">Transition Point</span>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-2 max-w-4xl mx-auto">
+      <!-- Step 1 -->
+      <div class="fade-in-section bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 text-center w-full md:w-1/4 h-40">
+        <span class="text-3xl text-sky-400">1.</span>
+        <h4 class="text-xl font-semibold text-sky-300 mt-2">CoT Runs</h4>
+        <p class="text-slate-400 text-sm mt-2">Model generates its reasoning (CoT).</p>
       </div>
-      <div class="arrow text-sky-400 text-3xl font-light my-2">⬇</div>
-      <div>
-        <span class="box inline-block bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 m-2 text-base">Induce Trial Answer</span>
+      <span class="fade-in-section text-sky-400 text-3xl font-light rotate-90 md:rotate-0">→</span>
+      <!-- Step 2 -->
+      <div class="fade-in-section bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 text-center w-full md:w-1/4 h-40">
+        <span class="text-3xl text-sky-400">2.</span>
+        <h4 class="text-xl font-semibold text-sky-300 mt-2">Check Point</h4>
+        <p class="text-slate-400 text-sm mt-2">At a transition point, DEER pauses the model.</p>
       </div>
-      <div class="arrow text-sky-400 text-3xl font-light my-2">⬇</div>
-      <div>
-        <span class="box inline-block bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 m-2 text-base">Compute Confidence \(C\)</span>
+      <span class="fade-in-section text-sky-400 text-3xl font-light rotate-90 md:rotate-0">→</span>
+      <!-- Step 3 -->
+      <div class="fade-in-section bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 text-center w-full md:w-1/4 h-40">
+        <span class="text-3xl text-sky-400">3.</span>
+        <h4 class="text-xl font-semibold text-sky-300 mt-2">Get \(C\)</h4>
+        <p class="text-slate-400 text-sm mt-2">Generates a trial answer; computes confidence \(C\).</p>
       </div>
-      <div class="arrow text-sky-400 text-3xl font-light my-2">⬇</div>
-      <div>
-        <span class="box2 inline-block bg-sky-600 text-white font-medium rounded-lg px-4 py-2 m-2 shadow-md text-base">If \(C > \lambda\) → Early Exit</span>
+      <span class="fade-in-section text-sky-400 text-3xl font-light rotate-90 md:rotate-0">→</span>
+      <!-- Step 4 -->
+      <div class="fade-in-section bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 text-center w-full md:w-1/4 h-40">
+        <span class="text-3xl text-sky-400">4.</span>
+        <h4 class="text-xl font-semibold text-sky-300 mt-2">Decision</h4>
+        <p class="text-slate-400 text-sm mt-2">If \(C > \lambda\), <span class="text-green-400 font-bold">EXIT</span>. Else, <span class="text-yellow-400 font-bold">CONTINUE</span>.</p>
       </div>
     </div>
+    <!-- End of Step-by-Step section -->
+
 
     <h3 class="fade-in-section text-2xl font-semibold text-cyan-300 mt-10 mb-4">3.1 DEER Confidence Formula</h3>
 
@@ -359,15 +494,112 @@
       \)
     </div>
 
-    <h3 class="fade-in-section text-2xl font-semibold text-cyan-300 mt-10 mb-4">5.2 Expected Improvements (My Method)</h3>
+    <!-- 
+      *************************************************
+      * [NEW] 5.2 The "Overthinking" Problem (Factual Trap)
+      * This is the CONTROL demo.
+      *************************************************
+    -->
+    <h3 class="fade-in-section text-2xl font-semibold text-cyan-300 mt-10 mb-4">5.2 The 'Overthinking' Problem (Factual Trap)</h3>
+    <p class="fade-in-section text-lg text-slate-400 mb-8">
+      First, let's see what happens when a standard model (or one with *only* basic DEER) encounters a factual trap. It's often trained on common-but-wrong information, leading to high token probability for the wrong answer.
+    </p>
 
-    <div class="fade-in-section flow bg-slate-800 rounded-xl shadow-lg p-8 my-6 space-y-3 text-lg">
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> Safer early exits (fewer wrong answers)</div>
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> More stable exit decisions (lower variance)</div>
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> Adaptation to different tasks (math/code/QA)</div>
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> User-aware reasoning depth</div>
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> Better accuracy–cost tradeoff</div>
-      <div class="flex items-center"><span class="text-green-400 mr-3">✔</span> Aligns with control theory mindset: multi-signal decision-making</div>
+    <div class="fade-in-section bg-slate-800 rounded-xl shadow-2xl max-w-2xl mx-auto my-12 border border-slate-700">
+      <!-- Chat Header -->
+      <div class="flex items-center p-4 border-b border-slate-700">
+        <span class="text-red-400 font-semibold">LLM Inference (Standard / Basic DEER)</span>
+        <span class="text-slate-500 text-sm ml-2">(Click "Run" to see)</span>
+        <span class="w-3 h-3 bg-red-500 rounded-full ml-auto mr-2"></span>
+        <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
+        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      </div>
+      
+      <!-- Chat Body -->
+      <div id="failure-chat-window" class="p-6 space-y-4 h-96 overflow-y-auto scroll-smooth">
+        <!-- User Message (Visible by default) -->
+        <div class="chat-bubble user-bubble is-visible">
+          <p class="font-semibold text-slate-200">User Prompt:</p>
+          <p>What is the capital of Australia?</p>
+        </div>
+        <!-- Model messages will be injected here by JS -->
+      </div>
+      
+      <!-- Chat Footer/Controls -->
+      <div class="p-4 border-t border-slate-700 text-center">
+        <button id="start-failure-demo-btn" class="bg-red-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-red-500 transition-colors shadow-md hover:shadow-lg">
+          Run Standard (Failing) Chain
+        </button>
+      </div>
+    </div>
+
+    <!-- 
+      *************************************************
+      * [MODIFIED] 5.3 Adaptive Confidence Demo (The Solution)
+      *************************************************
+    -->
+    <h3 class="fade-in-section text-2xl font-semibold text-cyan-300 mt-10 mb-4">5.3 My Adaptive Method Demo (The Solution)</h3>
+    <p class="fade-in-section text-lg text-slate-400 mb-8">
+      Now, let's run the *same prompt* with my Adaptive Confidence method. It uses \(C_{\text{sem}}\) (semantic check) to catch the error that basic DEER misses.
+    </p>
+
+    <div class="fade-in-section bg-slate-800 rounded-xl shadow-2xl max-w-2xl mx-auto my-12 border border-slate-700">
+      <!-- Chat Header -->
+      <div class="flex items-center p-4 border-b border-slate-700">
+        <span class="text-cyan-400 font-semibold">LLM Inference with Adaptive Confidence</span>
+        <span class="text-slate-500 text-sm ml-2">(Click "Run" to see)</span>
+        <span class="w-3 h-3 bg-red-500 rounded-full ml-auto mr-2"></span>
+        <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
+        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      </div>
+      
+      <!-- Chat Body -->
+      <div id="adaptive-chat-window" class="p-6 space-y-4 h-96 overflow-y-auto scroll-smooth">
+        <!-- User Message (Visible by default) -->
+        <div class="chat-bubble user-bubble is-visible">
+          <p class="font-semibold text-slate-200">User Prompt:</p>
+          <p>What is the capital of Australia?</p>
+        </div>
+        <!-- Model messages will be injected here by JS -->
+      </div>
+      
+      <!-- Chat Footer/Controls -->
+      <div class="p-4 border-t border-slate-700 text-center">
+        <button id="start-adaptive-demo-btn" class="bg-cyan-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-cyan-500 transition-colors shadow-md hover:shadow-lg">
+          Run Adaptive Chain
+        </button>
+      </div>
+    </div>
+
+
+    <h3 class="fade-in-section text-2xl font-semibold text-cyan-300 mt-10 mb-4">5.4 Expected Improvements (My Method)</h3>
+
+    <!-- [MODIFIED] Added ID and new structure for animation -->
+    <div id="improvements-list" class="flow bg-slate-800 rounded-xl shadow-lg p-8 my-6 space-y-3 text-lg">
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">Safer early exits (fewer wrong answers)</span>
+      </div>
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">More stable exit decisions (lower variance)</span>
+      </div>
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">Adaptation to different tasks (math/code/QA)</span>
+      </div>
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">User-aware reasoning depth</span>
+      </div>
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">Better accuracy–cost tradeoff</span>
+      </div>
+      <div class="improvement-item flex items-center">
+        <span class="check-icon text-green-400 mr-3">✔</span>
+        <span class="item-text">Aligns with control theory mindset: multi-signal decision-making</span>
+      </div>
     </div>
 
     <div class="fade-in-section h-px bg-slate-700 my-16"></div>
@@ -407,31 +639,171 @@
     document.addEventListener("DOMContentLoaded", () => {
       // 1. Select all elements with the .fade-in-section class
       const sections = document.querySelectorAll('.fade-in-section');
+      
       // 2. If IntersectionObserver isn't supported, make all sections visible
       if (!('IntersectionObserver' in window)) {
         sections.forEach(section => {
           section.classList.add('is-visible');
         });
-        return;
+        // We still run the chat demo logic, so no 'return' here
+      } else {
+         // 3. Create an IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            // 4. When the element enters the viewport
+            if (entry.isIntersecting) {
+              // 5. Add 'is-visible' class to trigger the CSS transition
+              entry.target.classList.add('is-visible');
+              // 6. Stop observing the element so the animation only plays once
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+        
+        // 7. Start observing all target elements
+        sections.forEach(section => {
+          observer.observe(section);
+        });
       }
-      // 3. Create an IntersectionObserver
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          // 4. When the element enters the viewport
-          if (entry.isIntersecting) {
-            // 5. Add 'is-visible' class to trigger the CSS transition
-            entry.target.classList.add('is-visible');
-            // 6. Stop observing the element so the animation only plays once
-            observer.unobserve(entry.target);
+
+      /* * [MODIFIED] 8. DEER Success Demo Logic (Demo 1)
+       */
+      const startDemoBtn = document.getElementById('start-demo-btn');
+      const chatWindow = document.getElementById('chat-window');
+
+      // [MODIFIED] Message sequence for DEER Success
+      const deerSuccessMessages = [
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model Reasoning (Step 1):</p><p>Let the ball cost \\$x$. The bat costs \\$x + \\$1.00$. Total is \\$x + (\\$x + \\$1.00) = \\$1.10$.</p>', class: 'model-bubble correct-idea', delay: 1000 },
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model Reasoning (Step 2):</p><p>2x + \\$1.00 = \\$1.10$. So, \\$2x = \\$0.10$. This means <strong>\\$x = \\$0.05</strong>. The ball costs 5 cents.</p>', class: 'model-bubble correct-idea', delay: 1500 },
+        { text: '<p class="font-semibold text-cyan-200 mb-1">DEER Confidence Check:</p><p>Generating Trial Answer: "$0.05"<br>Confidence \(C\) = 0.98 (High)<br>Threshold \(\lambda\) = 0.95</p>', class: 'model-bubble adaptive-check', delay: 1200 },
+        { text: '<p class="font-semibold text-green-200 mb-1">DEER Decision: ✅ Early Exit</p><p>Confidence is high. Stopping reasoning to prevent overthinking.</p>', class: 'model-bubble deer-exit', delay: 1000 },
+        { text: '<p class="font-semibold text-green-200 mb-1">Model Final Answer (Correct):</p><p>The ball costs <strong>\\$0.05</strong>.</p>', class: 'model-bubble deer-exit', delay: 1000 }
+      ];
+
+      // Async function to run the demo step-by-step
+      async function runDemo(button, window, messages) {
+        let originalText = button.textContent; // Store original button text
+        button.disabled = true;
+        button.textContent = 'Reasoning...';
+        
+        // Clear any previous demo run
+        window.querySelectorAll('.model-bubble').forEach(el => el.remove());
+        
+        // Loop through messages with async delays
+        for (const msg of messages) {
+          // Wait for the specified delay
+          await new Promise(res => setTimeout(res, msg.delay));
+          
+          // Create the new message bubble
+          const bubble = document.createElement('div');
+          bubble.className = `chat-bubble ${msg.class}`;
+          bubble.innerHTML = msg.text; // Use innerHTML to allow <strong> etc.
+          window.appendChild(bubble);
+          
+          // Force a reflow to ensure the animation triggers
+          void bubble.offsetWidth; 
+          
+          // Add 'is-visible' to start the fade-in animation
+          bubble.classList.add('is-visible');
+          
+          // Scroll to the bottom of the chat window
+          window.scrollTop = window.scrollHeight;
+        }
+        
+        // Re-enable the button
+        button.disabled = false;
+        button.textContent = originalText.includes('Re-Run') ? originalText : `Re-Run ${originalText.split('Run ')[1]}`;
+      }
+
+      // Attach the click event listener for Demo 1
+      if (startDemoBtn) {
+          startDemoBtn.addEventListener('click', () => runDemo(startDemoBtn, chatWindow, deerSuccessMessages));
+      }
+      
+      /* * [NEW] 9. "Expected Improvements" Animation Logic
+       */
+      const improvementsList = document.getElementById('improvements-list');
+      const improvementItems = document.querySelectorAll('.improvement-item');
+
+      if (improvementsList && improvementItems.length > 0 && 'IntersectionObserver' in window) {
+        const improvementObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Start staggered animation when the list container is visible
+              improvementItems.forEach((item, index) => {
+                setTimeout(() => {
+                  item.classList.add('is-visible');
+                  // Optional: trigger the 'pop' animation on the icon
+                  const icon = item.querySelector('.check-icon');
+                  if (icon) {
+                    icon.classList.add('animate');
+                  }
+                }, index * 150); // 150ms delay between each item
+              });
+              
+              // We've triggered the animation, so we can stop observing
+              observer.unobserve(improvementsList);
+            }
+          });
+        }, {
+          threshold: 0.2 // Trigger when 20% of the list is visible
+        });
+        
+        // Start observing the list container
+        improvementObserver.observe(improvementsList);
+        
+      } else {
+        // Fallback for older browsers or if observer fails
+        improvementItems.forEach(item => {
+          item.classList.add('is-visible');
+          // Fallback: just show icon immediately
+          const icon = item.querySelector('.check-icon');
+          if (icon) {
+              icon.style.opacity = '1';
+              icon.style.transform = 'scale(1)';
           }
         });
-      }, {
-        threshold: 0.1 // Trigger when 10% of the element is visible
-      });
-      // 7. Start observing all target elements
-      sections.forEach(section => {
-        observer.observe(section);
-      });
+      }
+
+      /* * [NEW/MODIFIED] 10. Adaptive Confidence Demos (Failure and Success)
+       */
+      const startFailureBtn = document.getElementById('start-failure-demo-btn');
+      const failureChatWindow = document.getElementById('failure-chat-window');
+      const startAdaptiveBtn = document.getElementById('start-adaptive-demo-btn');
+      const adaptiveChatWindow = document.getElementById('adaptive-chat-window');
+
+      // [NEW] Messages for the "Capital of Australia" FAILURE (Control)
+      const failureMessages = [
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model Reasoning (Step 1 - Trial):</p><p>The capital of Australia is <strong>Sy</strong></p>', class: 'model-bubble', delay: 1000 },
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model State:</p><p>...model is generating "Sydney". This has a very high token probability.</p>', class: 'model-bubble', delay: 1500 },
+        { text: '<p class="font-semibold text-red-200 mb-1">Basic DEER Check (Fails):</p><p>Confidence \(C_{\text{token}}\) = 0.95 (High)<br><b>Decision: ❌ EXIT</b></p>', class: 'model-bubble basic-deer-fail', delay: 1500 },
+        { text: '<p class="font-semibold text-red-200 mb-1">Model Final Answer (Wrong):</p><p>The capital of Australia is <strong>Sydney</strong>.</p>', class: 'model-bubble wrong-answer', delay: 1000 }
+      ];
+
+      // [NEW] Messages for the "Capital of Australia" SUCCESS (Adaptive)
+      const adaptiveMessages = [
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model Reasoning (Step 1 - Trial):</p><p>The capital of Australia is <strong>Sy</strong></p>', class: 'model-bubble', delay: 1000 },
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model State:</p><p>...model is generating "Sydney". This has a very high token probability.</p>', class: 'model-bubble', delay: 1500 },
+        { text: '<p class="font-semibold text-red-200 mb-1">Basic DEER Check (Fails):</p><p>Confidence \(C_{\text{token}}\) = 0.95 (High)<br><b>Decision: ❌ EXIT (with "Sydney")</b></p>', class: 'model-bubble basic-deer-fail', delay: 1500 },
+        { text: '<p class="font-semibold text-cyan-200 mb-1">My Adaptive Confidence Check:</p><p>\(C_{\text{token}}\) = 0.95 (High)<br>\(C_{\text{sem}}\) (Factual Check): "Capital(Australia) == Sydney"... <b>Contradiction!</b> Fact: "Canberra".<br><b>\(C_{\text{sem}}\) = 0.0 (Low)</b></p>', class: 'model-bubble adaptive-check', delay: 2000 },
+        { text: '<p class="font-semibold text-yellow-200 mb-1">My Adaptive Decision:</p><p>Final Adaptive \(C^*\) is Low.<br><b>Decision: ⚠️ CONTINUE Reasoning.</b></p>', class: 'model-bubble adaptive-continue', delay: 1500 },
+        { text: '<p class="font-semibold text-slate-300 mb-1">Model Reasoning (Step 2 - Correct):</p><p>...wait, my factual check failed. Sydney is the largest city, but the capital is Canberra.</p>', class: 'model-bubble correct-idea', delay: 1800 },
+        { text: '<p class="font-semibold text-green-200 mb-1">Model Final Answer (Correct):</p><p>The capital of Australia is <strong>Canberra</strong>.</p>', class: 'model-bubble deer-exit', delay: 1000 }
+      ];
+
+
+      // Attach the click event listener for Demo 2 (Failure)
+      if (startFailureBtn) {
+          startFailureBtn.addEventListener('click', () => runDemo(startFailureBtn, failureChatWindow, failureMessages));
+      }
+
+      // Attach the click event listener for Demo 3 (Success)
+      if (startAdaptiveBtn) {
+          startAdaptiveBtn.addEventListener('click', () => runDemo(startAdaptiveBtn, adaptiveChatWindow, adaptiveMessages));
+      }
+
     });
   </script>
 
